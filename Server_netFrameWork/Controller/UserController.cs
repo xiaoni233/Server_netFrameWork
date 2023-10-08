@@ -17,7 +17,7 @@ namespace Server_netFrameWork.Controller
         }
         public MainPack Logon(Server server, Client client, MainPack pack)
         {
-            if(client.Logon( pack)) 
+            if(client.GetUserData.Logon( pack,client.GetMysqlCon)) 
             {
                 pack.ReturnCode = ReturnCode.Succeed;
 
@@ -29,10 +29,19 @@ namespace Server_netFrameWork.Controller
             return pack;
         }
 
-        //public MainPack Login(Server server, Client client, MainPack pack)
-        //{
+        public MainPack Login(Server server, Client client, MainPack pack)
+        {
+            if (client.GetUserData.Login(pack, client.GetMysqlCon))
+            {
+                pack.ReturnCode = ReturnCode.Succeed;
 
-        //}
+            }
+            else
+            {
+                pack.ReturnCode = ReturnCode.Fail;
+            }
+            return pack;
+        }
     }
-   
+
 }

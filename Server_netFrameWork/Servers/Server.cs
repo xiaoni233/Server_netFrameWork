@@ -18,6 +18,9 @@ namespace Server_netFrameWork.Servers
         // 定义一个私有的类成员变量clientList，用于存储客户端列表
         private List<Client> clientList = new List<Client>();
 
+        private List<Room> roomList=new List<Room>();
+
+
         // 定义一个私有的类成员变量socket，用于接收客户端的连接
         private Socket socket;
 
@@ -80,6 +83,35 @@ namespace Server_netFrameWork.Servers
         public void   RemoveClient(Client client)
         {
             clientList.Remove(client);  
+        }
+
+
+        public ReturnCode CreateRoom(Client client,MainPack pack)
+        {
+            //第一个作为房主
+            try
+            {
+                Room room = new Room(client, pack.Roompack[0]);
+                roomList.Add(room);
+                return ReturnCode.Succeed;
+            }
+            catch
+            {
+                return ReturnCode.Fail;
+            }
+           
+
+        }
+
+        public MainPack FindRoom()
+        {
+            MainPack pack=new MainPack();
+            foreach(Room room in roomList)
+            {
+                pack.Actioncode = ActionCode.FindRoom;
+                pack.Roompack.Add(room.GetRoomInfo);
+            }
+            return pack;
         }
     }
 }

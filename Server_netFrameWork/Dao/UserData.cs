@@ -54,5 +54,30 @@ namespace Server_netFrameWork.Dao
             }
            return true;
         }
+        public bool Login(MainPack pack, MySqlConnection mysqlCon)
+        {
+            string username = pack.LoginPack.Username;
+            string password = pack.LoginPack.Password;
+
+            string sql = "SELECT * FROM userdata WHERE username='" + username + "' AND password='" + password + "'";
+            MySqlCommand cmd = new MySqlCommand(sql,mysqlCon);
+            MySqlDataReader read=null;
+            bool result=false;
+            try
+            {
+               read = cmd.ExecuteReader();
+                result= read.HasRows;
+                read.Close();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("登录查找失败");
+                Console.WriteLine(ex.Message);
+            }            
+            
+            return result;
+        }
     }
+
+    
 }

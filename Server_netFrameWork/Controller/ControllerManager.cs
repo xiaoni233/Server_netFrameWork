@@ -18,8 +18,11 @@ namespace Server_netFrameWork.Controller
         private Dictionary<RequestCode,BaseController>controlDict=new Dictionary<RequestCode,BaseController>();
         public ControllerManager(Server server) { 
             this.server = server;
-          UserController userController = new UserController();
+            UserController userController = new UserController();
             controlDict.Add(userController.GetRequestCode, userController);
+
+            TimerController tc = new TimerController();
+            controlDict.Add(tc.GetRequestCode, tc);
         }
 
         private Server server;
@@ -40,7 +43,7 @@ namespace Server_netFrameWork.Controller
 
                     if (method == null)
                     {
-                        Console.WriteLine("没有找到对应的Control处理");
+                        Console.WriteLine("没有找到对应的Action方法处理");
                         return;
                     }
                     Console.WriteLine("服务器控制器响应对应函数" + method.Name);
@@ -48,8 +51,8 @@ namespace Server_netFrameWork.Controller
                     //调用反射到的方法  public MainPack Login(Server server,Client client,MainPack pack)
                     
                     object ret = method.Invoke(controller, obj);
-
-                    //服务器调用函数，返回消息
+                    
+                    //服务器响应返回
                     if (ret != null)
                     {
                         client.Send(ret as MainPack);
@@ -58,7 +61,7 @@ namespace Server_netFrameWork.Controller
                 }
                 else
                 {
-                    Console.WriteLine("没有找到对应的Control处理");
+                    Console.WriteLine("没有找到对应的Controller处理");
                 }
             }catch (Exception ex)
             {

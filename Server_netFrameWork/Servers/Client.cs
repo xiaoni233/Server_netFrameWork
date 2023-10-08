@@ -26,6 +26,9 @@ namespace Server_netFrameWork.Servers
         {
             get { return userData; }
         }
+
+        public MySqlConnection GetMysqlCon { get => mysqlCon;  }
+
         public Client(Socket socket, Server server)
         {
             try
@@ -87,6 +90,7 @@ namespace Server_netFrameWork.Servers
 
         public void Send(MainPack pack)
         {
+          
             socket.Send(Message.PackeData(pack));
         }
         /// <summary>
